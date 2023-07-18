@@ -1,39 +1,56 @@
-import React, { useEffect, useState } from "react";
+import {
+  createBrowserRouter,
+  createRoutesFromElements,
+  Route,
+  RouterProvider,
+  Link,
+  Outlet,
+} from "react-router-dom";
+import HomePage from "./pages/HomePage";
+import AboutPage from "./pages/AboutPage";
+import MembersPage from "./pages/MembersPage";
+import NavBar from "./components/Navbar";
+
+const AppLayout = () => {
+    return (
+        <>
+            <NavBar/>
+            <Outlet />
+        </>
+    )
+}
+
+const router = createBrowserRouter([
+  {
+    element: <AppLayout />,
+    children: [
+        {
+            path: "/",
+            element: <HomePage />,
+        },
+        {
+            path:"/about",
+            element: <AboutPage />
+        },
+        {
+            path:"members",
+            element: <MembersPage />
+        },
+    ]
+  }
+      
+    //   <Route path="/" element={<HomePage />} />
+    //   <Route path="/about" element={<AboutPage />} />
+    //   <Route path="/members" element={<MembersPage />} />
+      
+  
+]);
 
 function App() {
-  const [data, setData] = useState([]);
-  useEffect(() => {
-    fetch("http://localhost:8080/users")
-      .then((res) => res.json())
-      .then(data => setData(data))
-      .catch(err => console.log(err));
-  }, []);
-  return (
-    <div style={{padding:"50px"}}>
-      <table>
-        <thead>
-          <tr>
-            <th>User ID</th>
-            <th>Last name</th>
-            <th>First name</th>
-            <th>Position</th>
-            <th>Email</th>
-          </tr>
-        </thead>
-        <tbody>
-            {data.map((d,i) => (
-                <tr key={i}>
-                    <td>{d.user_id}</td>
-                    <td>{d.last_name}</td>
-                    <td>{d.first_name}</td>
-                    <td>{d.position}</td>
-                    <td>{d.email}</td>
-                </tr>
-            ))}
-        </tbody>
-      </table>
-    </div>
-  );
+  return <RouterProvider router={router} />;
 }
 
 export default App;
+
+//const response = await axios.get('http://localhost:8080/api/users/1)
+// const data = response.data
